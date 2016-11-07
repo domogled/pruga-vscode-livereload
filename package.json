@@ -11,13 +11,29 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello"
+        "*"
     ],
     "main": "./out/src/extension",
     "contributes": {
+        "configuration": {
+            "type": "object",
+            "title": "Pruga configuration",
+            "properties": {
+                "pruga.liveServerPort": {
+                    "type": "integer",
+                    "default": 35729,
+                    "description": "Port number for the Live Server"
+                },
+                "pruga.webPath": {
+                    "type": "string",
+                    "default": "build/dev/**/*",
+                    "description": "Relative root location of the web directory"
+                }
+            }
+        },
         "commands": [{
-            "command": "extension.sayHello",
-            "title": "Hello World"
+            "command": "pruga.preview",
+            "title": "Preview and watch web page"
         }]
     },
     "scripts": {
