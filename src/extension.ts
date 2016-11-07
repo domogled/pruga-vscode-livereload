@@ -7,6 +7,7 @@ import {spawn} from 'child_process';
 
 var tinylr = require('tiny-lr');
 var server = tinylr();
+vscode.window.setStatusBarMessage(`Пруга: livereload disabled`)
 
 let config = vscode.workspace.getConfiguration('pruga')
 
@@ -27,6 +28,7 @@ export function activate(context: vscode.ExtensionContext) {
         server.listen(livereloadPort, function() {
             console.log('... Listening on %s ...', livereloadPort);
             vscode.window.showInformationMessage(`Пруга:livereload: ... Listening on ${livereloadPort} ...`);
+            vscode.window.setStatusBarMessage(`Пруга: livereload listening on ${livereloadPort}`)
         })
 
 
@@ -99,6 +101,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {
-    vscode.window.showInformationMessage(`Пруга:livereload: will be close`);
-    server.close();
+    vscode.window.showInformationMessage(`Пруга:livereload: will be close`)
+    vscode.window.setStatusBarMessage(`Пруга: livereload disabled`)
+    server.close()
 }
