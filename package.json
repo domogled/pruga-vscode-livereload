@@ -1,6 +1,6 @@
 {
     "name": "pruga-vscode-livereload",
-    "displayName": "pruga-vscode-builder",
+    "displayName": "pruga-vscode-livereload",
     "description": "simple livereloader",
     "version": "0.0.1",
     "publisher": "domogled",
@@ -31,10 +31,12 @@
                 }
             }
         },
-        "commands": [{
+        "commands": [
+            {
             "command": "pruga.preview",
             "title": "Preview and watch web page"
-        }]
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "tsc -p ./",

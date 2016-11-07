@@ -17,7 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
-    console.log('Congratulations, your extension "pruga-vscode-builder" is now active!');
+    console.log('Congratulations, your extension "pruga-vscode-livereload" is now active!');
     var livereloadPort = config["liveServerPort"]
 
     server.listen(livereloadPort, function() {
@@ -59,7 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
         });
 
 
-// curl dává do stderr výpis průběhu stahování a ten zobrazovat nechceme
+        // curl dává do stderr výpis průběhu stahování a ten zobrazovat nechceme
         /*curl.stderr.on('data', (buf) => {
             stderrMessage += buf.toString()
         });
@@ -95,8 +95,17 @@ export function activate(context: vscode.ExtensionContext) {
     let disposable = vscode.commands.registerCommand('pruga.preview', () => {
         // The code you place here will be executed every time your command is executed
 
-        // Display a message box to the user
-        vscode.window.showInformationMessage('Пруга: web will be preview');
+        /*let success = await*/ vscode.commands.executeCommand('vscode.previewHtml', `http://localhost/${path.basename(rootPath)}`, vscode.ViewColumn.Two)
+        // vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two)
+            .then(
+                s => {
+                    console.log('Пруга: web will be preview')
+                    vscode.window.showInformationMessage('Пруга: web will be preview');
+                },
+                // then error
+                vscode.window.showErrorMessage
+                )
+        
     });
 
     context.subscriptions.push(disposable);
