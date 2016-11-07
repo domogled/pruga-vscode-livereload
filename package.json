@@ -11,26 +11,10 @@
     "Other"
   ],
   "activationEvents": [
-    "*"
+    "workspaceContains:pruga.js"
   ],
   "main": "./out/src/extension",
   "contributes": {
-    "configuration": {
-      "type": "object",
-      "title": "Pruga configuration",
-      "properties": {
-        "pruga.liveServerPort": {
-          "type": "integer",
-          "default": 35729,
-          "description": "Port number for the Live Server."
-        },
-        "pruga.webPath": {
-            "type": "string",
-            "default": "build/dev/**/*",
-            "description": "Pattern to search changed files from relative root location of the web directory."
-        }
-      }
-    },
     "commands": [
       {
         "command": "pruga.livereload",

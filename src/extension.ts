@@ -5,15 +5,16 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import {spawn} from 'child_process';
 
-var tinylr = require('tiny-lr');
-var server = tinylr();
+const tinylr = require('tiny-lr');
+const server = tinylr();
 vscode.window.setStatusBarMessage(`Пруга livereload disabled`)
-
-let config = vscode.workspace.getConfiguration('pruga')
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+    const rootPath = vscode.workspace.rootPath;
+    const config = require(path.join(rootPath, 'pruga.js'))
+
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
@@ -23,22 +24,23 @@ export function activate(context: vscode.ExtensionContext) {
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
     let disposable = vscode.commands.registerCommand('pruga.livereload', () => {
-        var livereloadPort = config["liveServerPort"] || 35729
+        const livereloadPort = config.liveserver.port
 
         server.listen(livereloadPort, function() {
-            console.log('... Listening on %s ...', livereloadPort);
+            console.log(`Пруга livereload listening on ${livereloadPort} ...`);
             vscode.window.showInformationMessage(`Пруга livereload listening on ${livereloadPort} ...`);
             vscode.window.setStatusBarMessage(`Пруга livereload listening on ${livereloadPort}`)
         })
 
 
         function livereload(event) {
-            const file = path.relative(path.join(rootPath, config["webPath"]), event.fsPath)
+            const file = config.buildPath2webPath(event.fsPath)
             const url = `http://localhost:${livereloadPort}/changed?files=${file}`
             
             // terminal.sendText(`curl http://localhost:${livereloadPort}/changed?files=${file}`)
                 
             console.log(`Executing curl ${url}`)
+            vscode.window.showInformationMessage(`Пруга livereload change ${url} ...`)
             
             const curl = spawn('curl', [url]);
             let stderrMessage = '';
@@ -82,10 +84,9 @@ export function activate(context: vscode.ExtensionContext) {
         
         }
         
-        const rootPath = vscode.workspace.rootPath;
+
         if (rootPath) {
-            var webpath = path.join(rootPath, config["webPath"])
-            var fileSystemWatcher = vscode.workspace.createFileSystemWatcher(`${webpath}`);
+            const fileSystemWatcher = vscode.workspace.createFileSystemWatcher(`${config.liveserver.watch}`);
             context.subscriptions.push(
                 fileSystemWatcher,
                 fileSystemWatcher.onDidCreate(livereload),
