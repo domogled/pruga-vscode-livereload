@@ -7,7 +7,7 @@ import {spawn} from 'child_process';
 
 var tinylr = require('tiny-lr');
 var server = tinylr();
-vscode.window.setStatusBarMessage(`Пруга: livereload disabled`)
+vscode.window.setStatusBarMessage(`Пруга livereload disabled`)
 
 let config = vscode.workspace.getConfiguration('pruga')
 
@@ -27,8 +27,8 @@ export function activate(context: vscode.ExtensionContext) {
 
         server.listen(livereloadPort, function() {
             console.log('... Listening on %s ...', livereloadPort);
-            vscode.window.showInformationMessage(`Пруга:livereload: ... Listening on ${livereloadPort} ...`);
-            vscode.window.setStatusBarMessage(`Пруга: livereload listening on ${livereloadPort}`)
+            vscode.window.showInformationMessage(`Пруга livereload listening on ${livereloadPort} ...`);
+            vscode.window.setStatusBarMessage(`Пруга livereload listening on ${livereloadPort}`)
         })
 
 
@@ -49,8 +49,8 @@ export function activate(context: vscode.ExtensionContext) {
             }
 
             curl.on('error', (err) => {
-                console.log(`Пруга:curl:error: ${err}`);
-                vscode.window.showErrorMessage(`Пруга:curl:error: ${err}`);
+                console.log(`Пруга livereload:curl:error: ${err}`);
+                vscode.window.showErrorMessage(`Пруга livereload:curl:error: ${err}`);
             });
 
             curl.stdout.on('data', (buf) => {
@@ -58,8 +58,8 @@ export function activate(context: vscode.ExtensionContext) {
             });
             curl.stdout.on('end', () => {
                 if(stdoutMessage) {
-                    console.log(`Пруга:curl:stdout: ${stdoutMessage}`);
-                    vscode.window.showInformationMessage(`Пруга:curl:stdout: ${stdoutMessage}`);
+                    console.log(`Пруга livereload:curl:stdout: ${stdoutMessage}`);
+                    vscode.window.showInformationMessage(`Пруга livereload:curl:stdout: ${stdoutMessage}`);
                 }
             });
 
@@ -70,14 +70,14 @@ export function activate(context: vscode.ExtensionContext) {
             });
             curl.stderr.on('end', () => {
                 if(stderrMessage) {
-                    console.log(`Пруга:curl:stderr: ${stderrMessage}`);
-                    vscode.window.showErrorMessage(`Пруга:curl:stderr: ${stderrMessage}`);
+                    console.log(`Пруга livereload:curl:stderr: ${stderrMessage}`);
+                    vscode.window.showErrorMessage(`Пруга livereload:curl:stderr: ${stderrMessage}`);
                 }
             });*/
 
             curl.on('close', (code) => {
-                console.log(`Пруга:curl:child process exited with code ${code}`);
-                vscode.window.showInformationMessage(`Пруга:curl:child process exited with code ${code}`);
+                console.log(`Пруга livereload:curl:child process exited with code ${code}`);
+                vscode.window.showInformationMessage(`Пруга livereload:curl:child process exited with code ${code}`);
             });
         
         }
@@ -101,7 +101,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {
-    vscode.window.showInformationMessage(`Пруга:livereload: will be close`)
-    vscode.window.setStatusBarMessage(`Пруга: livereload disabled`)
+    vscode.window.showInformationMessage(`Пруга livereload: will be close`)
+    vscode.window.setStatusBarMessage(`Пруга livereload disabled`)
     server.close()
 }
