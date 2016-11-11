@@ -14,7 +14,7 @@ vscode.window.setStatusBarMessage(`Пруга livereload disabled`)
 export function activate(context: vscode.ExtensionContext) {
     const rootPath = vscode.workspace.rootPath;
     const config = require(path.join(rootPath, 'pruga.js'))
-
+    const SHOW_INFORMATION_MESSAGE = config["showInformationMessage"]
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
@@ -28,7 +28,9 @@ export function activate(context: vscode.ExtensionContext) {
 
         server.listen(livereloadPort, function() {
             console.log(`Пруга livereload listening on ${livereloadPort} ...`);
-            vscode.window.showInformationMessage(`Пруга livereload listening on ${livereloadPort} ...`);
+            if(SHOW_INFORMATION_MESSAGE) {
+                vscode.window.showInformationMessage(`Пруга livereload listening on ${livereloadPort} ...`);
+            }
             vscode.window.setStatusBarMessage(`Пруга livereload listening on ${livereloadPort}`)
         })
 
@@ -40,8 +42,9 @@ export function activate(context: vscode.ExtensionContext) {
             // terminal.sendText(`curl http://localhost:${livereloadPort}/changed?files=${file}`)
                 
             console.log(`Executing curl ${url}`)
-            vscode.window.showInformationMessage(`Пруга livereload change ${url} ...`)
-            
+            if(SHOW_INFORMATION_MESSAGE) {
+                vscode.window.showInformationMessage(`Пруга livereload change ${url} ...`)
+            }
             const curl = spawn('curl', [url]);
             let stderrMessage = '';
             let stdoutMessage = '';
@@ -61,7 +64,9 @@ export function activate(context: vscode.ExtensionContext) {
             curl.stdout.on('end', () => {
                 if(stdoutMessage) {
                     console.log(`Пруга livereload:curl:stdout: ${stdoutMessage}`);
-                    vscode.window.showInformationMessage(`Пруга livereload:curl:stdout: ${stdoutMessage}`);
+                    if(SHOW_INFORMATION_MESSAGE) {
+                        vscode.window.showInformationMessage(`Пруга livereload:curl:stdout: ${stdoutMessage}`);
+                    }
                 }
             });
 
@@ -79,7 +84,9 @@ export function activate(context: vscode.ExtensionContext) {
 
             curl.on('close', (code) => {
                 console.log(`Пруга livereload:curl:child process exited with code ${code}`);
-                vscode.window.showInformationMessage(`Пруга livereload:curl:child process exited with code ${code}`);
+                if(SHOW_INFORMATION_MESSAGE) {
+                    vscode.window.showInformationMessage(`Пруга livereload:curl:child process exited with code ${code}`);
+                }
             });
         
         }
@@ -102,7 +109,10 @@ export function activate(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {
-    vscode.window.showInformationMessage(`Пруга livereload: will be close`)
+    // if(SHOW_INFORMATION_MESSAGE) {
+    // @TODO: přece nebudu congig načítat globálně jen kvůli tomuto, nebo jo?
+        vscode.window.showInformationMessage(`Пруга livereload: will be close`)
+    // }
     vscode.window.setStatusBarMessage(`Пруга livereload disabled`)
     server.close()
 }
