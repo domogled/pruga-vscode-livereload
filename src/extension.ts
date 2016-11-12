@@ -26,14 +26,22 @@ export function activate(context: vscode.ExtensionContext) {
     let disposable = vscode.commands.registerCommand('pruga.livereload', () => {
         const livereloadPort = config.liveserver.port
 
-        server.listen(livereloadPort, function() {
-            console.log(`Пруга livereload listening on ${livereloadPort} ...`);
-            if(SHOW_INFORMATION_MESSAGE) {
-                vscode.window.showInformationMessage(`Пруга livereload listening on ${livereloadPort} ...`);
-            }
-            vscode.window.setStatusBarMessage(`Пруга livereload listening on ${livereloadPort}`)
-        })
 
+        if(server.listening){
+            vscode.window.showWarningMessage(`UŽ BĚŽÍ Пруга livereload listening on ${livereloadPort} ...`);
+        }
+        else {
+
+        
+
+            server.listen(livereloadPort, function() {
+                console.log(`Пруга livereload listening on ${livereloadPort} ...`);
+                if(SHOW_INFORMATION_MESSAGE) {
+                    vscode.window.showInformationMessage(`Пруга livereload listening on ${livereloadPort} ...`);
+                }
+                vscode.window.setStatusBarMessage(`Пруга livereload listening on ${livereloadPort}`)
+            })
+        }
 
         function livereload(event) {
             const file = config.buildPath2webPath(event.fsPath)
