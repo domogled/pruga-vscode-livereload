@@ -11,7 +11,7 @@
     "Other"
   ],
   "activationEvents": [
-    "workspaceContains:pruga.js"
+    "onCommand:pruga.livereload"
   ],
   "main": "./out/src/extension",
   "icon": "images/LiveReload_350.png",
